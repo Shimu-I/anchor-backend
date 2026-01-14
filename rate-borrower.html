@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rate The Borrower - Anchor</title>
+  <title>Rate The Borrower</title>
 
   <!-- Favicon -->
   <link rel="icon" href="images/icons/favicon.png">
@@ -52,7 +52,7 @@
         <!-- Category Ratings -->
         <div class="section ratings-section">
           <h3 class="section-title">Category Ratings</h3>
-          
+
           <div class="ratings-container">
             <!-- Rating Guide -->
             <div class="rating-guide">
@@ -132,7 +132,7 @@
         <div class="section recommendation-section">
           <label class="section-title">Recommendation</label>
           <p class="recommendation-hint">Would you recommend this borrower?</p>
-          
+
           <div class="recommendation-options">
             <label class="radio-option">
               <span class="radio-label">Yes</span>
@@ -186,7 +186,7 @@
 
       stars.forEach((star, index) => {
         // Click to rate
-        star.addEventListener('click', function() {
+        star.addEventListener('click', function () {
           const rating = parseInt(this.getAttribute('data-rating'));
           ratings[category] = rating;
 
@@ -206,7 +206,7 @@
         });
 
         // Hover effect
-        star.addEventListener('mouseenter', function() {
+        star.addEventListener('mouseenter', function () {
           const rating = parseInt(this.getAttribute('data-rating'));
           stars.forEach((s, i) => {
             if (i < rating) {
@@ -215,7 +215,7 @@
           });
         });
 
-        container.addEventListener('mouseleave', function() {
+        container.addEventListener('mouseleave', function () {
           stars.forEach((s, i) => {
             if (i < ratings[category]) {
               s.style.color = '#70C1BF';

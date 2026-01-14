@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create a Fundraiser</title>
+    <title>Funding form</title>
     <link rel="stylesheet" href="/styles/funding-interface-form.css">
     <link rel="stylesheet" href="styles/index.css">
-  <link rel="stylesheet" href="styles/header-footer.css">
+    <link rel="stylesheet" href="styles/header-footer.css">
 </head>
+
 <body>
-      <!-- Header -->
-  <div id="headerPlaceholder"></div>
+    <!-- Header -->
+    <div id="headerPlaceholder"></div>
 
     <div class="container">
         <h1>Create a Fundraiser</h1>
-        
+
         <form id="fundraiserForm">
             <!-- Category -->
             <div class="form-group category-section">
@@ -41,13 +43,13 @@
                 <textarea id="summary" placeholder="Summary" rows="4" required></textarea>
             </div>
 
-        
+
 
             <!-- 3. Purpose of Funding -->
             <div class="form-group">
                 <label class="section-label">3. Purpose of Funding</label>
                 <p class="helper-text">What the money will be used for (select multiple):</p>
-                
+
                 <div class="checkbox-group">
                     <label class="checkbox-label">
                         <input type="checkbox" name="purpose" value="clothes" checked>
@@ -69,7 +71,7 @@
                 </div>
             </div>
 
-           
+
 
             <!-- 4. Proof & Verification -->
             <div class="form-group">
@@ -86,24 +88,26 @@
                 <input type="file" id="fileUpload" multiple hidden>
             </div>
 
-           
+
 
             <!-- 5. Distribution / Action Plan -->
             <div class="form-group">
                 <label class="section-label">5. Distribution / Action Plan</label>
-                <p class="helper-text">User explains:<br>- What they will distribute<br>- With whom (volunteers/team)</p>
+                <p class="helper-text">User explains:<br>- What they will distribute<br>- With whom (volunteers/team)
+                </p>
                 <textarea id="actionPlan" rows="4"></textarea>
             </div>
 
-         
 
-        
+
+
 
             <!-- Final Confirmation -->
             <div class="form-group">
                 <label class="checkbox-label confirmation">
                     <input type="checkbox" id="confirmation" required>
-                    <span class="confirmation-text">I confirm that the information provided is accurate and I take full responsibility for any false or misleading details.</span>
+                    <span class="confirmation-text">I confirm that the information provided is accurate and I take full
+                        responsibility for any false or misleading details.</span>
                 </label>
             </div>
 
@@ -112,10 +116,11 @@
         </form>
     </div>
 
-      <!-- Footer -->
-  <div id="footerPlaceholder"></div>
-  
-  <script src="javascript/header-footer.js"></script>
+    <!-- Footer -->
+    <div id="footerPlaceholder"></div>
+
+    <script src="javascript/header-footer.js"></script>
     <script src="/javascript/funding-interface-form.js"></script>
 </body>
+
 </html>

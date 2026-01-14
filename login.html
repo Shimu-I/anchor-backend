@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Log In - Anchor</title>
+  <title>Log In</title>
   <link rel="icon" href="images/icons/favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -32,11 +32,25 @@
       <div class="auth-form-container">
         <div class="auth-form">
           <h2>Log In</h2>
-          <form>
-            <input type="email" placeholder="Email" required>
-            <input type="password" placeholder="Password" required>
+          <form id="loginForm">
+
+            <div class="input-group">
+              <label for="email" class="sr-only">Email Address</label>
+              <input type="email" id="email" name="email" placeholder="Email" required autocomplete="username">
+            </div>
+
+            <div class="input-group">
+              <label for="password" class="sr-only">Password</label>
+              <input type="password" id="password" name="password" placeholder="Password" required
+                autocomplete="current-password">
+            </div>
+
+            <div id="errorMessage" class="error-text" style="display:none; color: red; margin-bottom: 10px;"></div>
+
             <button type="submit" class="btn-primary">Log In</button>
           </form>
+
+          <p class="forgot-pass"><a href="forgot-password.html">Forgot Password?</a></p>
           <p class="switch-text">Don't have an account? <a href="signup.html">Sign Up</a></p>
         </div>
       </div>
@@ -44,6 +58,7 @@
   </section>
 
   <script src="javascript/header-footer.js"></script>
+  <script src="javascript/login.js"></script>
 
 </body>
 
