@@ -5,8 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Views Users Funding Uploads</title>
-  <link rel="stylesheet" href="/styles/admin-views-funding-users-uploads.css">
-  <link rel="stylesheet" href="/styles/admin-sidebar.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="styles/admin-views-funding-users-uploads.css">
+  <link rel="stylesheet" href="styles/admin-sidebar.css">
   <link rel="stylesheet" href="styles/index.css">
   <link rel="stylesheet" href="styles/header-footer.css">
 
@@ -28,66 +29,18 @@
         <div class="loan-request-body">
           <h1 class="page-title">Users-no-1 (Uploads)</h1>
 
-          <div class="requests-list">
-            <!-- Request 1 -->
-            <div class="request-item">
-              <div class="request-info">
-                <div class="request-id">1</div>
-
-                <div class="username">document-1</div>
-              </div>
-              <div class="request-actions">
-
-
-                <a href="images/file.jpg" target="_blank" class="btn btn-approve">
-                  View
-                </a>
-
-
-              </div>
-            </div>
-
-
-
-            <!-- Request 1 -->
-            <div class="request-item">
-              <div class="request-info">
-                <div class="request-id">2</div>
-
-                <div class="username">document-2</div>
-              </div>
-              <div class="request-actions">
-
-                <button class="btn btn-approve">View</button>
-
-              </div>
-            </div>
-
-
-            <!-- Request 1 -->
-            <div class="request-item">
-              <div class="request-info">
-                <div class="request-id">3</div>
-
-                <div class="username">document-3</div>
-              </div>
-              <div class="request-actions">
-
-                <button class="btn btn-approve">View</button>
-
-              </div>
-            </div>
-
-
-
-
-
-
+          <div class="requests-list" id="documentsContainer">
+            <!-- Documents will be loaded here dynamically -->
           </div>
+        </div>
+
+
+      </div>
     </main>
   </div>
 
 
+  <script src="javascript/admin-views-funding-documents.js"></script>
   <script src="javascript/header-footer.js"></script>
   <script src="javascript/admin-sidebar.js"></script>
 </body>

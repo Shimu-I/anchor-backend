@@ -1,17 +1,21 @@
+body {
+  overflow-x: hidden;
+  /* Prevent horizontal scroll */
+}
+
 .sidebar {
   position: fixed;
-  top: 150px;
-  bottom: 0px;
-  left: 0px;
-
+  top: 85px;
+  /* Below header */
+  left: 0;
   width: 250px;
-  height: 400px;
-  padding: 40px 20px;
-  margin: 40px 0 40px 150px;
-  border: 2px solid #1a4f5a;
-  border-radius: 8px;
-  height: fit-content;
-  background-color: rgb(10, 57, 64);
+  height: calc(100vh - 85px);
+  padding: 30px 15px;
+  background-color: #0a3940;
+  border-right: 2px solid #1a4f5a;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 100;
 }
 
 .sidebar-item {
@@ -24,31 +28,37 @@
   font-size: 16px;
   font-weight: 500;
   user-select: none;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sidebar-item:hover {
-  background-color: rgba(125, 211, 192, 0.1);
+  background-color: rgba(125, 211, 192, 0.15);
   color: #7dd3c0;
 }
 
 .sidebar-item.active {
-  background-color: rgba(125, 211, 192, 0.15);
+  background-color: rgba(125, 211, 192, 0.2);
   color: #fff;
+  border-left: 3px solid #7dd3c0;
 }
 
 .sidebar a {
   text-decoration: none;
-  /* removes the underline from links */
   color: inherit;
-  /* keeps the text color the same */
+  display: block;
 }
 
-.sidebar-item {
-  cursor: pointer;
-  /* shows hand icon when hovering */
-}
-
-.sidebar-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  /* nice hover effect */
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    top: 0;
+    border-right: none;
+    border-bottom: 2px solid #1a4f5a;
+  }
 }
