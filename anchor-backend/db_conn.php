@@ -19,7 +19,7 @@ try {
     $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
     // echo "Connected successfully"; // Keep commented out for production
-
+    echo "Database is connected! ✓\n";
 } catch (PDOException $e) {
     // If connection fails, show why
     die("Connection failed: " . $e->getMessage());
