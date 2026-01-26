@@ -51,6 +51,44 @@ body {
   display: block;
 }
 
+/* Sidebar Divider */
+.sidebar-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(220, 53, 69, 0.5), transparent);
+  margin: 25px 0;
+}
+
+/* Sidebar Section Title */
+.sidebar-section-title {
+  padding: 10px 20px;
+  color: #a0c4c7;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.7;
+}
+
+.sidebar-section-title.danger-title {
+  color: #ff6b6b;
+}
+
+/* Danger Item */
+.danger-item {
+  border-left: 3px solid transparent;
+  transition: all 0.3s;
+}
+
+.danger-item:hover {
+  background-color: rgba(220, 53, 69, 0.15);
+  color: #ff6b6b;
+  border-left-color: #dc3545;
+}
+
+.danger-item i {
+  margin-right: 8px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .sidebar {
