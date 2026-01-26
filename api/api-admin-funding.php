@@ -113,7 +113,6 @@ try {
             JOIN users u ON cp.creator_id = u.user_id
             LEFT JOIN crowdfunding_documents cd ON cp.post_id = cd.post_id
             LEFT JOIN crowdfunding_contributions cc ON cp.post_id = cc.post_id AND cc.payment_status = 'completed'
-            WHERE cp.status IN ('pending', 'approved', 'open')
             GROUP BY cp.post_id
             ORDER BY cp.created_at DESC";
 

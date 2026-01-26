@@ -16,23 +16,21 @@ if (!isset($_SESSION['user_id'])) {
 try {
     $user_id = $_SESSION['user_id'];
 
-    // Get notifications from the notifications table
-    $query = "SELECT 
-                n.notification_id,
-                n.user_id,
-                n.type,
-                n.title,
-                n.message,
-                n.reference_id,
-                n.reference_type,
-                n.is_read,
-                n.created_at,
-                u.full_name as sender_name
-              FROM notifications n
-              LEFT JOIN users u ON n.sender_id = u.user_id
-              WHERE n.user_id = :user_id
-              ORDER BY n.created_at DESC
-              LIMIT 50";
+        // Get notifications from the notifications table (fixed columns)
+        $query = "SELECT 
+                                n.notification_id,
+                                n.user_id,
+                                n.type,
+                                n.title,
+                                n.message,
+                                n.loan_id,
+                                n.post_id,
+                                n.is_read,
+                                n.created_at
+                            FROM notifications n
+                            WHERE n.user_id = :user_id
+                            ORDER BY n.created_at DESC
+                            LIMIT 50";
 
     $stmt = $conn->prepare($query);
     $stmt->execute([':user_id' => $user_id]);
