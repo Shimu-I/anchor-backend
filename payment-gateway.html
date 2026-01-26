@@ -18,63 +18,93 @@
 
   <div id="headerPlaceholder"></div>
 
-  <div class="payment-container">
+  <!-- Loading State -->
+  <div id="loadingState"
+    style="display: flex; justify-content: center; align-items: center; min-height: 60vh; color: white;">
+    <div style="text-align: center;">
+      <i class="fas fa-spinner fa-spin" style="font-size: 40px; color: #00bfa5; margin-bottom: 20px;"></i>
+      <p>Loading payment details...</p>
+    </div>
+  </div>
 
-    <div class="payment-modal">
-      <a href="index.html" class="payment-close-btn" title="Cancel Payment">×</a>
+  <!-- Payment Modal Overlay -->
+  <div class="payment-overlay" id="paymentOverlay" style="display: none;">
+    <div class="payment-container">
 
-      <div class="modal-header">
-        <h2>Donate Info</h2>
-        <div class="amount-field">
-          <label>Amount (৳):</label>
-          <input type="text" value="10000.00" id="amountDisplay" readonly>
-        </div>
-        <h3 class="payment-method-title">Payment method</h3>
+      <!-- Fundraiser Info Header -->
+      <div class="fundraiser-info-header" id="fundraiserInfo">
+        <!-- Will be populated by JavaScript -->
       </div>
 
-      <div class="payment-tabs">
-        <button class="tab active" data-tab="cards">Cards</button>
-        <button class="tab" data-tab="mobile">Mobile Banking</button>
-      </div>
+      <form id="paymentForm" action="payment-gateway.php" method="POST" class="payment-modal">
+        <input type="hidden" name="ref_amount" id="hiddenAmount">
+        <input type="hidden" name="ref_type" id="hiddenType">
+        <input type="hidden" name="ref_id" id="hiddenId">
+        <input type="hidden" name="payment_method" id="hiddenMethod" value="card">
 
-      <div id="cardsTab" class="tab-content active">
-        <div class="card-logos">
-          <img src="images/payment-gateway/visa.jpg" alt="Visa">
-          <img src="images/payment-gateway/mastercard.jpg" alt="Mastercard">
-          <img src="images/payment-gateway/americanex.jpg" alt="American Express">
-        </div>
-        <div class="card-form-container">
-          <input type="text" placeholder="Card Number" maxlength="19">
-          <div class="expiry-cvc-row">
-            <input type="text" placeholder="MM/YY" maxlength="5">
-            <input type="text" placeholder="CVC/CVV" maxlength="4">
+        <a href="javascript:history.back()" class="payment-close-btn" title="Cancel Payment">×</a>
+
+        <div class="modal-header">
+          <h2>Complete Your Donation</h2>
+          <div class="amount-field">
+            <label>Donation Amount (৳):</label>
+            <input type="number" min="1" step="0.01" value="0.00" id="amountDisplay"
+              style="background: white; cursor: text;" placeholder="Enter amount">
           </div>
-          <input type="text" placeholder="Card Holder Name">
-          <div class="checkbox-group">
-            <input type="checkbox" id="rememberCard">
-            <label for="rememberCard">Remember this card</label>
+          <h3 class="payment-method-title">Payment method</h3>
+        </div>
+
+        <div class="payment-tabs">
+          <button type="button" class="tab active" data-tab="cards">Cards</button>
+          <button type="button" class="tab" data-tab="mobile">Mobile Banking</button>
+        </div>
+
+        <div id="cardsTab" class="tab-content active">
+          <div class="card-logos">
+            <img src="images/payment-gateway/visa.jpg" alt="Visa">
+            <img src="images/payment-gateway/mastercard.jpg" alt="Mastercard">
+            <img src="images/payment-gateway/americanex.jpg" alt="American Express">
           </div>
-          <div class="checkbox-group">
-            <input type="checkbox" id="terms">
-            <label for="terms">I agree to the <a href="#" target="_blank">Terms of Service</a></label>
+          <div class="card-form-container">
+            <input type="text" name="card_number" placeholder="Card Number" maxlength="19">
+            <div class="expiry-cvc-row">
+              <input type="text" name="card_expiry" placeholder="MM/YY" maxlength="5">
+              <input type="text" name="card_cvc" placeholder="CVC/CVV" maxlength="4">
+            </div>
+            <input type="text" name="card_holder" placeholder="Card Holder Name">
+            <div class="checkbox-group">
+              <input type="checkbox" id="rememberCard">
+              <label for="rememberCard">Remember this card</label>
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="terms" required>
+              <label for="terms">I agree to the <a href="#" target="_blank">Terms of Service</a></label>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div id="mobileTab" class="tab-content">
-        <div class="mobile-banking-grid">
-          <div class="mobile-banking-option"><img src="images/payment-gateway/nogod.jpg" alt="Nagad"></div>
-          <div class="mobile-banking-option"><img src="images/payment-gateway/dbbl.jpg" alt="DBBL"></div>
-          <div class="mobile-banking-option"><img src="images/payment-gateway/nogod.jpg" alt="bKash"></div>
-          <div class="mobile-banking-option"><img src="images/payment-gateway/rocket.jpg" alt="Rocket"></div>
-          <div class="mobile-banking-option"><img src="images/payment-gateway/upai.jpg" alt="Upay"></div>
+        <div id="mobileTab" class="tab-content">
+          <div class="mobile-banking-grid">
+            <div class="mobile-banking-option" data-method="nagad"><img src="images/payment-gateway/nogod.jpg"
+                alt="Nagad"></div>
+            <div class="mobile-banking-option" data-method="dbbl"><img src="images/payment-gateway/dbbl.jpg" alt="DBBL">
+            </div>
+            <div class="mobile-banking-option" data-method="bkash"><img src="images/payment-gateway/nogod.jpg"
+                alt="bKash"></div>
+            <div class="mobile-banking-option" data-method="rocket"><img src="images/payment-gateway/rocket.jpg"
+                alt="Rocket"></div>
+            <div class="mobile-banking-option" data-method="upay"><img src="images/payment-gateway/upai.jpg" alt="Upay">
+            </div>
+          </div>
+          <input type="hidden" name="mobile_provider" id="mobileProvider">
+          <p id="selectedMobileText" style="text-align:center; color:green; font-weight:bold;"></p>
         </div>
-      </div>
 
-      <button class="pay-button" id="confirmPayBtn">
-        Pay <span id="payBtnAmount">10000.00</span> ৳
-      </button>
+        <button type="submit" name="submit_payment" class="pay-button" id="confirmPayBtn">
+          Pay <span id="payBtnAmount">0.00</span> ৳
+        </button>
 
+      </form>
     </div>
   </div>
 

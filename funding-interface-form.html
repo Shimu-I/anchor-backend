@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Funding form</title>
-    <link rel="stylesheet" href="/styles/funding-interface-form.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="styles/funding-interface-form.css">
     <link rel="stylesheet" href="styles/index.css">
     <link rel="stylesheet" href="styles/header-footer.css">
 </head>
@@ -17,7 +18,7 @@
     <div class="container">
         <h1>Create a Fundraiser</h1>
 
-        <form id="fundraiserForm">
+        <form id="fundraiserForm" action="funding-interface-form.php" method="POST" enctype="multipart/form-data">
             <!-- Category -->
             <div class="form-group category-section">
                 <label class="category-label">Category</label>
@@ -27,23 +28,60 @@
                     <button type="button" class="category-btn" data-category="community">Community</button>
                     <button type="button" class="category-btn" data-category="emergency">Emergency</button>
                     <button type="button" class="category-btn" data-category="custom">Custom</button>
-                    <input type="text" id="customCategory" class="custom-input" placeholder="Enter custom category">
+
+                    <input type="hidden" name="category" id="hiddenCategory">
+                    <input type="text" name="custom_category" id="customCategory" class="custom-input"
+                        placeholder="Enter custom category">
                 </div>
             </div>
 
             <!-- 1. Fundraiser Title -->
             <div class="form-group">
                 <label class="section-label">1. Fundraiser Title</label>
-                <input type="text" id="title" placeholder="Winter Clothes for Street Children" required>
+                <input type="text" name="title" id="title" placeholder="Winter Clothes for Street Children" required>
+            </div>
+
+            <!-- Cover Photo Upload -->
+            <div class="form-group">
+                <label class="section-label">Cover Photo (Optional)</label>
+                <p class="helper-text">Upload a cover photo for your campaign. If not provided, a default image based on
+                    your category will be used.</p>
+
+                <div class="cover-photo-upload">
+                    <div class="cover-photo-preview" id="coverPhotoPreview">
+                        <i class="fas fa-image" style="font-size: 48px; color: #00bfa5; margin-bottom: 10px;"></i>
+                        <p style="color: #888; font-size: 14px;">No cover photo selected</p>
+                        <p style="color: #666; font-size: 12px;">Default category image will be used</p>
+                    </div>
+                    <input type="file" name="cover_photo" id="coverPhotoInput" accept="image/*" hidden>
+                    <button type="button" class="upload-btn" id="coverPhotoBtn" style="margin-top: 12px;">
+                        <i class="fas fa-camera"></i> Choose Cover Photo
+                    </button>
+                    <button type="button" class="remove-btn" id="removeCoverPhotoBtn"
+                        style="display: none; margin-top: 12px; margin-left: 10px; background: #e74c3c;">
+                        <i class="fas fa-times"></i> Remove
+                    </button>
+                </div>
             </div>
 
             <!-- 2. Summary of the Situation -->
             <div class="form-group">
                 <label class="section-label">2. Summary of the Situation</label>
-                <textarea id="summary" placeholder="Summary" rows="4" required></textarea>
+                <textarea name="summary" id="summary" placeholder="Summary" rows="4" required></textarea>
             </div>
 
-
+            <!-- Target Details (New Section based on DB) -->
+            <div class="form-group">
+                <label class="section-label">Target Details</label>
+                <input type="text" name="location" id="location" placeholder="Location"
+                    style="margin-bottom: 10px; width: 100%; padding: 10px;">
+                <div style="display: flex; gap: 10px;">
+                    <input type="number" name="num_people" id="numPeople" placeholder="Number of People"
+                        style="flex: 1; padding: 10px;">
+                    <input type="text" name="age_group" id="ageGroup" placeholder="Age Group (e.g., 5-10 yrs)"
+                        style="flex: 1; padding: 10px;">
+                </div>
+            </div>
 
             <!-- 3. Purpose of Funding -->
             <div class="form-group">
@@ -52,31 +90,43 @@
 
                 <div class="checkbox-group">
                     <label class="checkbox-label">
-                        <input type="checkbox" name="purpose" value="clothes" checked>
+                        <input type="checkbox" name="purpose[]" value="clothes">
                         <span>Clothes</span>
                     </label>
                     <label class="checkbox-label">
-                        <input type="checkbox" name="purpose" value="food">
+                        <input type="checkbox" name="purpose[]" value="food">
                         <span>Food</span>
                     </label>
                     <label class="checkbox-label">
-                        <input type="checkbox" name="purpose" value="medical">
+                        <input type="checkbox" name="purpose[]" value="medical">
                         <span>Medical Items</span>
                     </label>
                     <label class="checkbox-label">
-                        <input type="checkbox" name="purpose" value="other">
+                        <input type="checkbox" name="purpose[]" value="other">
                         <span>Other</span>
                     </label>
-                    <input type="text" id="otherPurpose" placeholder="type..." class="other-input">
+                    <input type="text" name="other_purpose" id="otherPurpose" placeholder="type..." class="other-input">
                 </div>
             </div>
 
-
+            <!-- Fund Breakdown (New Section based on JS) -->
+            <div class="form-group">
+                <label class="section-label">Fund Breakdown</label>
+                <div id="breakdownItems">
+                    <!-- Items injected by JS -->
+                </div>
+                <button type="button" id="addItemBtn" class="upload-btn" style="margin-top: 10px;">+ Add Item</button>
+                <div style="margin-top: 15px; font-weight: bold;">
+                    <input type="text" id="totalAmount" readonly value="Total: $0.00"
+                        style="border: none; background: transparent; font-size: 1.2em;">
+                    <input type="hidden" name="amount_needed" id="hiddenAmountNeeded">
+                </div>
+            </div>
 
             <!-- 4. Proof & Verification -->
             <div class="form-group">
-                <label class="section-label">4. Proof & Verification (Upload section)</label>
-                <p class="helper-text">User must upload at least 1:</p>
+                <label class="section-label">4. Additional Documents (Optional)</label>
+                <p class="helper-text">Upload supporting documents (optional):</p>
                 <ol class="upload-list">
                     <li>Photos of incident / past work</li>
                     <li>Short video</li>
@@ -84,26 +134,55 @@
                     <li>News report screenshot</li>
                     <li>Location images</li>
                 </ol>
-                <button type="button" class="upload-btn">Upload 📎</button>
-                <input type="file" id="fileUpload" multiple hidden>
+
+                <select name="doc_type" required style="margin-bottom: 10px; width: 100%; padding: 10px;">
+                    <option value="" disabled selected>Select Document Type</option>
+                    <option value="proof">Proof of Incident</option>
+                    <option value="medical">Medical Document</option>
+                    <option value="bill">Bill/Cost Estimate</option>
+                    <option value="other">Other</option>
+                </select>
+
+                <button type="button" class="upload-btn">Choose File 📎</button>
+                <input type="file" name="crowd_documents[]" id="fileUpload" multiple hidden>
             </div>
-
-
 
             <!-- 5. Distribution / Action Plan -->
             <div class="form-group">
                 <label class="section-label">5. Distribution / Action Plan</label>
                 <p class="helper-text">User explains:<br>- What they will distribute<br>- With whom (volunteers/team)
                 </p>
-                <textarea id="actionPlan" rows="4"></textarea>
+                <textarea name="action_plan" id="actionPlan" rows="4"></textarea>
             </div>
 
+            <!-- Extra Fields for DB -->
+            <div class="form-group">
+                <label class="section-label">Additional Info</label>
+                <p>Will you share receipts after spending?</p>
+                <div class="repayment-options"> <!-- Using same style class -->
+                    <label class="checkbox-label">
+                        <input type="radio" name="share_receipts" value="yes" checked>
+                        <span>Yes</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="radio" name="share_receipts" value="no">
+                        <span>No</span>
+                    </label>
+                </div>
 
-
-
+                <p style="margin-top: 15px;">How will extra funds be handled?</p>
+                <textarea name="extra_funds_handling" placeholder="e.g., Donate to charity, usage for next event..."
+                    rows="2" style="width: 100%; padding: 10px;"></textarea>
+            </div>
 
             <!-- Final Confirmation -->
             <div class="form-group">
+                <label class="checkbox-label confirmation">
+                    <input type="checkbox" id="updateCommitment" required>
+                    <span class="confirmation-text">I agree to post updates regarding the progress of this
+                        fundraiser.</span>
+                </label>
+                <br>
                 <label class="checkbox-label confirmation">
                     <input type="checkbox" id="confirmation" required>
                     <span class="confirmation-text">I confirm that the information provided is accurate and I take full
@@ -112,7 +191,9 @@
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" class="submit-btn">Submit</button>
+            <button type="submit" name="submit_fundraiser" class="submit-btn"
+                style="background: #27ae60; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 1.1em; cursor: pointer; width: 100%; margin-top: 20px;">Create
+                Fundraiser</button>
         </form>
     </div>
 

@@ -1,7 +1,56 @@
 // Category button functionality
 const categoryButtons = document.querySelectorAll('.category-btn');
 const customCategoryInput = document.getElementById('customCategory');
+const hiddenCategoryInput = document.getElementById('hiddenCategory');
 let selectedCategory = '';
+
+// Cover Photo Upload Functionality
+const coverPhotoBtn = document.getElementById('coverPhotoBtn');
+const coverPhotoInput = document.getElementById('coverPhotoInput');
+const coverPhotoPreview = document.getElementById('coverPhotoPreview');
+const removeCoverPhotoBtn = document.getElementById('removeCoverPhotoBtn');
+let selectedCoverPhoto = null;
+
+if (coverPhotoBtn) {
+    coverPhotoBtn.addEventListener('click', () => {
+        coverPhotoInput.click();
+    });
+}
+
+if (coverPhotoInput) {
+    coverPhotoInput.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            selectedCoverPhoto = file;
+
+            // Create preview
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                coverPhotoPreview.innerHTML = `<img src="${e.target.result}" alt="Cover Photo Preview">`;
+                coverPhotoPreview.classList.add('has-image');
+                removeCoverPhotoBtn.style.display = 'inline-block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            alert('Please select a valid image file.');
+            coverPhotoInput.value = '';
+        }
+    });
+}
+
+if (removeCoverPhotoBtn) {
+    removeCoverPhotoBtn.addEventListener('click', () => {
+        coverPhotoInput.value = '';
+        selectedCoverPhoto = null;
+        coverPhotoPreview.innerHTML = `
+            <i class="fas fa-image" style="font-size: 48px; color: #00bfa5; margin-bottom: 10px;"></i>
+            <p style="color: #888; font-size: 14px;">No cover photo selected</p>
+            <p style="color: #666; font-size: 12px;">Default category image will be used</p>
+        `;
+        coverPhotoPreview.classList.remove('has-image');
+        removeCoverPhotoBtn.style.display = 'none';
+    });
+}
 
 categoryButtons.forEach(button => {
     button.addEventListener('click', function () {
@@ -12,14 +61,17 @@ categoryButtons.forEach(button => {
         this.classList.add('active');
 
         selectedCategory = this.dataset.category;
+        hiddenCategoryInput.value = selectedCategory;
 
         // Show/hide custom input based on selection
         if (selectedCategory === 'custom') {
             customCategoryInput.style.display = 'inline-block';
-            customCategoryInput.focus(); // nice UX touch
+            customCategoryInput.focus();
+            customCategoryInput.required = true;
         } else {
             customCategoryInput.style.display = 'none';
             customCategoryInput.value = '';
+            customCategoryInput.required = false;
         }
     });
 });
@@ -37,10 +89,11 @@ function addBreakdownItem() {
     itemDiv.className = 'breakdown-item';
     itemDiv.id = `item-${itemCount}`;
 
+    // Added name attributes for PHP processing
     itemDiv.innerHTML = `
-        <input type="text" placeholder="Item Name" class="item-name">
-        <input type="number" placeholder="Quantity" class="item-quantity" min="0">
-        <input type="number" placeholder="Cost per unit" class="item-cost" min="0">
+        <input type="text" name="item_name[]" placeholder="Item Name" class="item-name" required>
+        <input type="number" name="item_quantity[]" placeholder="Quantity" class="item-quantity" min="1" required>
+        <input type="number" name="item_cost[]" placeholder="Cost per unit" class="item-cost" min="0" step="0.01" required>
         <input type="number" placeholder="Total" class="item-total" readonly>
     `;
 
@@ -73,6 +126,7 @@ function calculateGrandTotal() {
     });
 
     document.getElementById('totalAmount').value = `Total: $${grandTotal.toFixed(2)}`;
+    document.getElementById('hiddenAmountNeeded').value = grandTotal.toFixed(2);
 }
 
 // Add Item Button
@@ -93,101 +147,51 @@ document.getElementById('fileUpload').addEventListener('change', function (e) {
     }
 });
 
-// NID Upload handler
-document.querySelector('.change-btn').addEventListener('click', function () {
-    document.getElementById('nidUpload').click();
-});
-
-document.getElementById('nidUpload').addEventListener('change', function (e) {
-    const file = e.target.files[0];
-    if (file) {
-        const nidInput = document.querySelector('.nid-upload input[type="text"]');
-        nidInput.value = file.name;
-    }
-});
-
 // Other purpose input visibility
-const otherCheckbox = document.querySelector('input[name="purpose"][value="other"]');
+// Note: name is now purpose[]
+const otherCheckbox = document.querySelector('input[value="other"]');
 const otherInput = document.getElementById('otherPurpose');
 
-otherCheckbox.addEventListener('change', function () {
-    if (this.checked) {
-        otherInput.style.display = 'inline-block';
-    } else {
-        otherInput.style.display = 'none';
-        otherInput.value = '';
-    }
-});
+if (otherCheckbox) {
+    otherCheckbox.addEventListener('change', function () {
+        if (this.checked) {
+            otherInput.style.display = 'inline-block';
+        } else {
+            otherInput.style.display = 'none';
+            otherInput.value = '';
+        }
+    });
+}
 
 // Initialize other input as hidden
-otherInput.style.display = 'none';
+if (otherInput) otherInput.style.display = 'none';
 
-// Form submission
+// Form submission key validation
 document.getElementById('fundraiserForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-
     // Validate category selection
-    if (!selectedCategory) {
+    if (!hiddenCategoryInput.value) {
+        e.preventDefault();
         alert('Please select a category.');
         return;
     }
 
-    // Validate required fields
+    // Validate confirmation
     const updateCommitment = document.getElementById('updateCommitment');
     const confirmation = document.getElementById('confirmation');
 
     if (!updateCommitment.checked) {
+        e.preventDefault();
         alert('Please agree to provide updates during the fundraiser.');
         return;
     }
 
     if (!confirmation.checked) {
+        e.preventDefault();
         alert('Please confirm that the information provided is accurate.');
         return;
     }
 
-    // Collect form data
-    const formData = {
-        category: selectedCategory,
-        customCategory: customCategoryInput.value,
-        title: document.getElementById('title').value,
-        summary: document.getElementById('summary').value,
-        location: document.getElementById('location').value,
-        numPeople: document.getElementById('numPeople').value,
-        ageGroup: document.getElementById('ageGroup').value,
-        purposes: Array.from(document.querySelectorAll('input[name="purpose"]:checked')).map(cb => cb.value),
-        otherPurpose: document.getElementById('otherPurpose').value,
-        breakdownItems: [],
-        fullName: document.getElementById('fullName').value,
-        phone: document.getElementById('phone').value,
-        socialMedia: document.getElementById('socialMedia').value,
-        actionPlan: document.getElementById('actionPlan').value,
-        shareReceipts: document.querySelector('input[name="shareReceipts"]:checked').value,
-        extraFunds: Array.from(document.querySelectorAll('input[name="extraFunds"]:checked')).map(cb => cb.value)
-    };
-
-    // Collect breakdown items
-    const breakdownItems = document.querySelectorAll('.breakdown-item');
-    breakdownItems.forEach(item => {
-        const itemData = {
-            name: item.querySelector('.item-name').value,
-            quantity: item.querySelector('.item-quantity').value,
-            cost: item.querySelector('.item-cost').value,
-            total: item.querySelector('.item-total').value
-        };
-        if (itemData.name && itemData.quantity && itemData.cost) {
-            formData.breakdownItems.push(itemData);
-        }
-    });
-
-    // Log form data (in real application, this would be sent to a server)
-    console.log('Form submitted:', formData);
-
-    // Show success message
-    alert('Fundraiser created successfully!');
-
-    // Optionally reset the form
-    // this.reset();
+    // Allow default submission to PHP
 });
 
 // Real-time validation feedback

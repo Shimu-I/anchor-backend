@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="styles/index.css">
   <link rel="stylesheet" href="styles/header-footer.css">
   <link rel="stylesheet" href="styles/funding-view.css">
+  <link rel="stylesheet" href="styles/payment-modal.css">
 
 </head>
 
@@ -30,87 +31,21 @@
   <!-- Main Content -->
   <div class="main-frame">
     <div class="content" role="region" aria-label="Funding details">
-      <div class="inner-scroll">
-        <div class="page-title">View Funding Information</div>
-
-        <div class="meta-row" aria-hidden="true" style="justify-content: flex-start;">
-          <span class="tag">Flood Relief</span>
-          <span class="date">Posted on 12 Feb, 2025</span>
+      <div class="inner-scroll" id="fundingContent">
+        <!-- Loading state -->
+        <div class="loading-state" style="text-align: center; padding: 60px 20px; color: #fff;">
+          <i class="fas fa-spinner fa-spin" style="font-size: 40px; margin-bottom: 20px; color: #00bfa5;"></i>
+          <p>Loading fundraiser details...</p>
         </div>
-
-        <div class="main-row">
-          <div class="left-col">
-            <div class="heading">Emergency Aid for Flood Victims</div>
-
-            <p class="description">
-              Right now, children are wading through waist-deep water with nothing but the clothes on their backs.
-              Families have lost their homes overnight. Your donation provides emergency food packs, clean water,
-              medicine, and hope. Together we can help them survive and rebuild.
-            </p>
-
-            <div class="progress-section" aria-hidden="true">
-              <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="52">
-                <div class="progress-fill"></div>
-              </div>
-              <div class="progress-amounts">
-                <span>৳6,500</span>
-                <span>৳12,500</span>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="right-visual">
-            <div class="photo" role="img" aria-label="Flood relief photo"></div>
-
-          </div>
-        </div>
-
-        <div class="plan">
-          <div class="section-title" style="text-align:left;">Our Initial Response Plan</div>
-          <ol class="response-list">
-            <li><strong>Medical & Hygiene Assistance</strong><br>Basic first aid, hygiene kits, and medicine will be
-              provided to prevent illness and infections.</li>
-            <li><strong>Identify Affected Families</strong><br>We are working with local volunteers to identify the most
-              severely affected families, especially children, elderly people, and those who lost their homes.</li>
-            <li><strong>Provide Emergency Essentials</strong><br>We will distribute food packs, clean drinking water,
-              basic clothing, and essential medicines to meet urgent needs.</li>
-            <li><strong>Temporary Shelter Support</strong><br>Families without shelter will receive support for
-              temporary accommodation, including tarpaulins, mats, and blankets.</li>
-            <li><strong>Ongoing Monitoring & Updates</strong><br>We will share regular updates on fund usage and expand
-              support based on community needs.</li>
-          </ol>
-        </div>
-
-        <div class="section-title" style="text-align: left; margin-top: 18px;">
-          How Your Money Will Be Used
-        </div>
-
-        <div class="usage-and-cost" style="display: block; margin-left: 20px;">
-          <div class="purpose" style="display: block; width: 544px;">
-            <h4>Purpose of Funding</h4>
-            <ol>
-              <li>For flood victims</li>
-              <li>Emergency food</li>
-              <li>Clean water</li>
-              <li>Hygiene supplies</li>
-              <li>Medical items</li>
-              <li>Temporary shelter materials</li>
-            </ol>
-          </div>
-        </div>
-
-        <div class="cost-breakdown" style="margin-top: 20px; margin-left: 0;">
-
-
-        </div> <!-- .inner-scroll -->
-      </div> <!-- .content -->
-    </div> <!-- .main-frame -->
+      </div> <!-- .inner-scroll -->
+    </div> <!-- .content -->
+  </div> <!-- .main-frame -->
 
 
 
-
-    <script src="javascript/header-footer.js"></script>
+  <script src="javascript/header-footer.js"></script>
+  <script src="javascript/payment-modal.js"></script>
+  <script src="javascript/funding-view.js"></script>
 </body>
 
 </html>

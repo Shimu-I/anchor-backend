@@ -25,26 +25,89 @@ body {
 h1 {
     color: #7dd3d3;
     text-align: center;
-    font-size: 30px;
-    margin: 10px 0 30px;
-    font-weight: 700;
+    font-size: 24px;
+    margin: 10px 0 24px;
+    font-weight: 600;
 }
 
 .form-group {
-    margin-bottom: 30px;
+    margin-bottom: 24px;
+}
+
+/* Cover Photo Upload Section */
+.cover-photo-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.cover-photo-preview {
+    width: 100%;
+    max-width: 600px;
+    height: 250px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px dashed rgba(125, 211, 211, 0.3);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.cover-photo-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cover-photo-preview.has-image {
+    border: 2px solid #7dd3d3;
+    background: transparent;
+}
+
+.cover-photo-preview p {
+    margin: 4px 0;
+}
+
+#coverPhotoBtn {
+    background-color: #7dd3d3;
+    color: #0a2e2e;
+}
+
+#coverPhotoBtn:hover {
+    background-color: #6bc4c4;
+}
+
+.remove-btn {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.remove-btn:hover {
+    background-color: #ff5252;
 }
 
 .section-label {
     display: block;
     color: #7dd3d3;
-    font-size: 1.25rem;
+    font-size: 16px;
     margin-bottom: 10px;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .helper-text {
     color: #a0c4c4;
-    font-size: 0.9rem;
+    font-size: 13px;
     margin-bottom: 10px;
     line-height: 1.5;
 }
@@ -55,21 +118,21 @@ h1 {
 
 /* Category Section */
 .category-section {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .category-label {
     color: #e0f0f0;
-    font-size: 1.1rem;
-    font-weight: 400;
+    font-size: 15px;
+    font-weight: 500;
     display: block;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .category-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
     align-items: center;
 }
 
@@ -77,9 +140,9 @@ h1 {
     background-color: #7dd3d3;
     color: #0a2e2e;
     border: none;
-    padding: 8px 22px;
-    border-radius: 18px;
-    font-size: 0.9rem;
+    padding: 7px 18px;
+    border-radius: 16px;
+    font-size: 13px;
     cursor: pointer;
     font-weight: 500;
     transition: all 0.2s;
@@ -97,22 +160,22 @@ h1 {
 
 .custom-input {
     width: 120px;
-    padding: 8px 12px;
+    padding: 7px 10px;
     background-color: rgba(255, 255, 255, 0.9);
     border: none;
     border-radius: 5px;
-    font-size: 0.85rem;
+    font-size: 13px;
     font-family: inherit;
     color: #333;
 }
 
 #title {
-     width: 100%;
-    padding: 12px 15px;
+    width: 100%;
+    padding: 10px 14px;
     background-color: rgba(255, 255, 255, 0.9);
     border: none;
     border-radius: 5px;
-    font-size: 1rem;
+    font-size: 14px;
     font-family: inherit;
     color: #333;
 }
@@ -123,11 +186,11 @@ h1 {
 textarea,
 .nid-upload input[type="text"] {
     width: 100%;
-    padding: 12px 15px;
+    padding: 10px 14px;
     background-color: rgba(255, 255, 255, 0.9);
     border: none;
     border-radius: 5px;
-    font-size: 1rem;
+    font-size: 14px;
     font-family: inherit;
     color: #333;
 }
@@ -161,7 +224,7 @@ textarea {
 
 .inline-field label {
     color: #a0c4c4;
-    font-size: 0.9rem;
+    font-size: 13px;
     margin-bottom: 5px;
 }
 
@@ -176,46 +239,46 @@ textarea {
     display: flex;
     align-items: center;
     color: #e0f0f0;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 14px;
 }
 
 .checkbox-label input[type="checkbox"],
 .radio-label input[type="radio"] {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
     cursor: pointer;
     accent-color: #7dd3d3;
 }
 
 .checkbox-group {
     display: flex;
-    gap: 20px;
+    gap: 16px;
     flex-wrap: wrap;
     align-items: center;
 }
 
 .other-input {
     width: 150px;
-    padding: 8px 12px;
+    padding: 7px 10px;
     background-color: rgba(255, 255, 255, 0.9);
     border: none;
     border-radius: 5px;
-    font-size: 0.9rem;
+    font-size: 13px;
     color: #333;
 }
 
 .radio-options {
     display: flex;
-    gap: 30px;
+    gap: 18px;
     margin-top: 10px;
     flex-wrap: wrap;
 }
 
 .extra-funds {
-    margin-top: 20px;
+    margin-top: 16px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -223,41 +286,42 @@ textarea {
 
 .extra-funds-label {
     color: #7dd3d3;
-    font-size: 1.15rem;
-    font-weight: 700;
-    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
 /* Fund Breakdown */
 #fundBreakdown {
     background-color: rgba(255, 255, 255, 0.05);
-    padding: 15px;
+    padding: 12px;
     border-radius: 5px;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .breakdown-header {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 10px;
+    gap: 8px;
     color: #7dd3d3;
     font-weight: 500;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
     border-bottom: 1px solid rgba(125, 211, 211, 0.3);
+    font-size: 13px;
 }
 
 .breakdown-item {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 10px;
+    gap: 8px;
+    margin-bottom: 8px;
     align-items: center;
 }
 
 .breakdown-item input {
-    padding: 8px 10px;
-    font-size: 0.9rem;
+    padding: 7px 8px;
+    font-size: 13px;
     background-color: rgba(255, 255, 255, 0.9);
     border: none;
     border-radius: 4px;
@@ -268,10 +332,10 @@ textarea {
     background-color: #ff6b6b;
     color: white;
     border: none;
-    padding: 8px;
+    padding: 6px;
     border-radius: 3px;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 12px;
 }
 
 .remove-btn:hover {
@@ -282,11 +346,11 @@ textarea {
     background-color: transparent;
     color: #7dd3d3;
     border: 1px solid #7dd3d3;
-    padding: 10px 20px;
+    padding: 8px 16px;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1rem;
-    margin-top: 10px;
+    font-size: 13px;
+    margin-top: 8px;
 }
 
 .add-btn:hover {
@@ -297,30 +361,31 @@ textarea {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 15px;
-    margin-top: 15px;
+    gap: 12px;
+    margin-top: 12px;
     color: #a0c4c4;
-    font-size: 1.1rem;
+    font-size: 14px;
 }
 
 .total-section input {
-    width: 200px;
+    width: 180px;
     text-align: center;
     background-color: #E7EEEE;
     font-weight: 500;
     color: black;
-    padding: 10px;
+    padding: 8px;
     border: none;
     border-radius: 5px;
+    font-size: 14px;
 }
 
 /* Upload Section */
 .upload-list {
     color: #a0c4c4;
-    margin-left: 20px;
-    margin-bottom: 15px;
-    line-height: 1.8;
-    font-size: 0.95rem;
+    margin-left: 18px;
+    margin-bottom: 12px;
+    line-height: 1.6;
+    font-size: 13px;
 }
 
 .upload-btn,
@@ -328,10 +393,10 @@ textarea {
     background-color: #7dd3d3;
     color: #0a2e2e;
     border: none;
-    padding: 10px 25px;
+    padding: 8px 20px;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 14px;
     font-weight: 500;
     transition: background-color 0.3s;
 }
@@ -349,34 +414,35 @@ textarea {
 
 /* Confirmation */
 .confirmation {
-    padding: 15px;
+    padding: 12px;
     background-color: rgba(255, 255, 255, 0.05);
     border-radius: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .confirmation-text {
     color: #ff6b6b;
     font-weight: 500;
-    line-height: 1.6;
+    line-height: 1.5;
+    font-size: 14px;
 }
 
-#updateCommitment + span {
+#updateCommitment+span {
     color: #ff6b6b;
 }
 
 /* Submit Button */
 .submit-btn {
     width: 100%;
-    max-width: 400px;
+    max-width: 350px;
     display: block;
-    margin: 30px auto 0;
-    padding: 15px;
+    margin: 30px auto 40px;
+    padding: 12px;
     background-color: #7dd3d3;
     color: #0a2e2e;
     border: none;
     border-radius: 5px;
-    font-size: 1.2rem;
+    font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.3s;
