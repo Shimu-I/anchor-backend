@@ -112,28 +112,12 @@ function createFundraiserCard(post) {
                     View (${post.document_count || 0})
                 </a>
                 
-                ${post.status === 'pending' ? `
-                    <button class="btn btn-approve" data-id="${post.post_id}" data-action="approve">
-                        Approve
-                    </button>
-                    <button class="btn btn-decline" data-id="${post.post_id}" data-action="reject">
-                        Decline
-                    </button>
-                ` : post.status === 'approved' ? `
-                    <button class="btn btn-decline" data-id="${post.post_id}" data-action="reject" title="Decline this approved fundraiser">
-                        Decline
-                    </button>
-                    <span class="status-badge status-${post.status}">
-                        ${post.status.toUpperCase()}
-                    </span>
-                ` : `
-                    <button class="btn btn-approve" data-id="${post.post_id}" data-action="approve" title="Approve this rejected fundraiser">
-                        Approve
-                    </button>
-                    <span class="status-badge status-${post.status}">
-                        ${post.status.toUpperCase()}
-                    </span>
-                `}
+                <button class="btn btn-approve" data-id="${post.post_id}" data-action="approve" ${(post.status === 'open' || post.status === 'approved') ? 'disabled' : ''}>
+                    Approve
+                </button>
+                <button class="btn btn-decline" data-id="${post.post_id}" data-action="reject" ${post.status === 'rejected' ? 'disabled' : ''}>
+                    Decline
+                </button>
                 
                 <button class="btn btn-delete" data-id="${post.post_id}" title="Delete this fundraiser">
                     Delete
@@ -218,14 +202,29 @@ function showDeleteConfirmation(id, type) {
     modal.className = 'delete-modal-overlay';
     modal.innerHTML = `
         <div class="delete-modal">
-            <div class="delete-modal-icon">
-                <i class="fas fa-exclamation-triangle"></i>
+            <button class="delete-modal-close">&times;</button>
+            <div class="delete-modal-header">
+                <div class="delete-modal-icon">
+                    <i class="fas fa-trash-alt"></i>
+                </div>
+                <h2 class="delete-modal-title">Delete ${type === 'fundraiser' ? 'Fundraiser' : 'Loan Request'}</h2>
             </div>
-            <h3 class="delete-modal-title">Delete ${type === 'fundraiser' ? 'Fundraiser' : 'Loan Request'}?</h3>
-            <p class="delete-modal-message">This action cannot be undone. All associated data will be permanently removed.</p>
-            <div class="delete-modal-actions">
-                <button class="delete-modal-btn delete-modal-cancel">Cancel</button>
-                <button class="delete-modal-btn delete-modal-confirm">Delete</button>
+            <div class="delete-modal-body">
+                <p class="delete-modal-message">Are you sure you want to permanently delete this ${type === 'fundraiser' ? 'fundraiser' : 'loan request'}?</p>
+                <div class="delete-modal-warning">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>This action cannot be undone. All associated data will be permanently removed from the system.</span>
+                </div>
+            </div>
+            <div class="delete-modal-footer">
+                <button class="delete-modal-btn btn-cancel">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </button>
+                <button class="delete-modal-btn btn-delete-confirm">
+                    <i class="fas fa-trash-alt"></i>
+                    Delete Permanently
+                </button>
             </div>
         </div>
     `;
@@ -235,16 +234,23 @@ function showDeleteConfirmation(id, type) {
     // Animate in
     setTimeout(() => modal.classList.add('active'), 10);
     
+    // Handle close button
+    modal.querySelector('.delete-modal-close').addEventListener('click', () => {
+        modal.classList.remove('active');
+        setTimeout(() => modal.remove(), 300);
+    });
+    
     // Handle cancel
-    modal.querySelector('.delete-modal-cancel').addEventListener('click', () => {
+    modal.querySelector('.btn-cancel').addEventListener('click', () => {
         modal.classList.remove('active');
         setTimeout(() => modal.remove(), 300);
     });
     
     // Handle confirm
-    modal.querySelector('.delete-modal-confirm').addEventListener('click', async () => {
-        modal.querySelector('.delete-modal-confirm').disabled = true;
-        modal.querySelector('.delete-modal-confirm').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+    modal.querySelector('.btn-delete-confirm').addEventListener('click', async () => {
+        const deleteBtn = modal.querySelector('.btn-delete-confirm');
+        deleteBtn.disabled = true;
+        deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
         
         try {
             const response = await fetch('api/api-admin-funding.php', {
