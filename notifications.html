@@ -3,29 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notifications</title>
+  <title>Notifications - Lendora</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="images/icons/favicon.png">
+  
+  <!-- Fonts & Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles/index.css">
+  <link rel="stylesheet" href="styles/header-footer.css">
   <link rel="stylesheet" href="styles/notifications.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/notification-bell.css">
 </head>
 <body>
-  <div class="frame">
-    <h1 class="title">Notifications</h1>
+  <!-- Header -->
+  <div id="headerPlaceholder"></div>
 
-    <div class="notification-box">
-      <div class="user-info">
-        <img src="images/elli.png" alt="Elli_user" class="avatar">
-        <div class="user-details">
-          <p class="username">User Name: Elli_user</p>
-          <p class="status">Loan Offer Accepted</p>
-        </div>
-      </div>
+  <div class="notifications-container">
+    <h1 class="notifications-title">
+      <i class="fas fa-bell"></i> Notifications
+    </h1>
 
-      <p class="message">
-        The borrower has accepted your offer for a College (Education) loan.
+    <div id="notificationsContent">
+      <p style="text-align: center; padding: 40px; color: #6c757d;">
+        <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i><br>
+        Loading notifications...
       </p>
     </div>
   </div>
 
-  <script src="Javascript/notifications.js"></script>
+  <!-- Footer -->
+  <div id="footerPlaceholder"></div>
+
+  <script src="javascript/header-footer.js"></script>
+  <script src="javascript/notification-count.js"></script>
+  <script src="javascript/notifications.js"></script>
 </body>
 </html>

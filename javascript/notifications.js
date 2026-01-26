@@ -1,127 +1,142 @@
-// Notifications overlay functionality
-let notificationsData = [];
+// Notifications page functionality
+document.addEventListener('DOMContentLoaded', function() {
+    loadNotifications();
+});
 
 async function loadNotifications() {
-  try {
-    const response = await fetch('api/api-get-notifications.php');
-    const data = await response.json();
+    try {
+        const response = await fetch('api/api-get-notifications.php', {
+            credentials: 'include'
+        });
+        const data = await response.json();
 
-    if (data.success) {
-      notificationsData = data.notifications;
-      return data.notifications;
-    } else {
-      console.error('Error loading notifications:', data.error);
-      return [];
+        if (data.success) {
+            displayNotifications(data.notifications);
+        } else if (data.error === 'Not logged in') {
+            window.location.href = 'login.html';
+        } else {
+            document.getElementById('notificationsContent').innerHTML = `
+                <p style="text-align: center; padding: 40px; color: #dc3545;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 2rem;"></i><br>
+                    ${data.error || 'Failed to load notifications'}
+                </p>
+            `;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('notificationsContent').innerHTML = `
+            <p style="text-align: center; padding: 40px; color: #dc3545;">
+                <i class="fas fa-exclamation-circle" style="font-size: 2rem;"></i><br>
+                Failed to load notifications
+            </p>
+        `;
     }
-  } catch (error) {
-    console.error('Error:', error);
-    return [];
-  }
 }
 
-function createNotificationHTML(notifications) {
-  if (!notifications || notifications.length === 0) {
-    return '<p style="text-align: center; color: rgba(255,255,255,0.6); padding: 40px;">No notifications yet</p>';
-  }
+function displayNotifications(notifications) {
+    const container = document.getElementById('notificationsContent');
 
-  return notifications.map(notif => {
-    const date = new Date(notif.created_at).toLocaleDateString('en-US', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    if (!notifications || notifications.length === 0) {
+        container.innerHTML = `
+            <div style="text-align: center; padding: 60px 20px;">
+                <i class="fas fa-bell-slash" style="font-size: 4rem; color: #e9ecef; margin-bottom: 1rem;"></i>
+                <p style="color: #6c757d; font-size: 1.1rem;">No notifications yet</p>
+            </div>
+        `;
+        return;
+    }
 
-    return `
-      <div class="notification-box ${notif.is_read ? '' : 'unread'}">
-        <div class="user-info">
-          <div class="user-details">
-            <p class="username">${notif.sender_name || 'System'}</p>
-            <p class="status">${notif.title || notif.type}</p>
-            <p class="notif-date">${date}</p>
-          </div>
-        </div>
-        <p class="message">${notif.message}</p>
-      </div>
-    `;
-  }).join('');
+    container.innerHTML = notifications.map(notif => {
+        const date = new Date(notif.created_at);
+        const timeAgo = getTimeAgo(date);
+        const isUnread = notif.is_read == 0;
+
+        // Determine icon and color based on type
+        let iconClass = 'fa-bell';
+        let iconColor = '#70C1BF';
+        
+        switch(notif.type) {
+            case 'loan_accepted':
+                iconClass = 'fa-check-circle';
+                iconColor = '#28a745';
+                break;
+            case 'loan_offer':
+                iconClass = 'fa-hand-holding-usd';
+                iconColor = '#007bff';
+                break;
+            case 'contribution':
+                iconClass = 'fa-heart';
+                iconColor = '#dc3545';
+                break;
+            case 'approval':
+                iconClass = 'fa-check-circle';
+                iconColor = '#28a745';
+                break;
+            case 'rejection':
+                iconClass = 'fa-times-circle';
+                iconColor = '#dc3545';
+                break;
+        }
+
+        // Check if this is an accepted offer notification (for lenders)
+        const showPaymentButton = notif.type === 'loan_accepted' && notif.title === 'Offer Accepted!';
+
+        return `
+            <div class="notification-card ${isUnread ? 'unread' : ''}" onclick="markAsRead(${notif.notification_id})">
+                <div class="notification-icon" style="background-color: ${iconColor}20;">
+                    <i class="fas ${iconClass}" style="color: ${iconColor};"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <h3>${notif.title}</h3>
+                        ${isUnread ? '<span class="unread-badge">New</span>' : ''}
+                        <span class="notification-time">${timeAgo}</span>
+                    </div>
+                    <p class="notification-message">${notif.message}</p>
+                    ${showPaymentButton ? `
+                        <a href="payment-gateway.html?loan_id=${notif.loan_id}" class="btn-payment">
+                            <i class="fas fa-credit-card"></i> Proceed to Payment
+                        </a>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+    }).join('');
 }
 
-async function initNotificationOverlay() {
-  // Create overlay structure
-  const overlayHTML = `
-    <div id="notificationOverlay" class="notification-overlay" style="display: none;">
-      <div class="frame">
-        <button class="close-overlay" id="closeNotificationOverlay">
-          <i class="fas fa-times"></i>
-        </button>
-        <h1 class="title">Notifications</h1>
-        <div id="notificationsList">
-          <p style="text-align: center; padding: 40px;">Loading...</p>
-        </div>
-      </div>
-    </div>
-  `;
-
-  // Insert overlay into body
-  document.body.insertAdjacentHTML('beforeend', overlayHTML);
-
-  const notificationBtn = document.querySelector('.btn-notifications');
-  const overlay = document.getElementById('notificationOverlay');
-  const closeBtn = document.getElementById('closeNotificationOverlay');
-  const notificationsList = document.getElementById('notificationsList');
-
-  // Open overlay when notification button is clicked
-  if (notificationBtn) {
-    notificationBtn.addEventListener('click', async function (e) {
-      e.preventDefault();
-      overlay.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-
-      // Load and display notifications
-      const notifications = await loadNotifications();
-      notificationsList.innerHTML = createNotificationHTML(notifications);
-
-      // Add fade-in animation
-      setTimeout(() => {
-        overlay.classList.add('active');
-      }, 10);
-    });
-  }
-
-  // Close overlay function
-  function closeOverlay() {
-    overlay.classList.remove('active');
-    setTimeout(() => {
-      overlay.style.display = 'none';
-      document.body.style.overflow = '';
-    }, 300);
-  }
-
-  // Close when X button is clicked
-  if (closeBtn) {
-    closeBtn.addEventListener('click', closeOverlay);
-  }
-
-  // Close when clicking outside the frame
-  overlay.addEventListener('click', function (e) {
-    if (e.target === overlay) {
-      closeOverlay();
-    }
-  });
-
-  // Close with Escape key
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && overlay.style.display === 'flex') {
-      closeOverlay();
-    }
-  });
+function getTimeAgo(date) {
+    const seconds = Math.floor((new Date() - date) / 1000);
+    
+    let interval = seconds / 31536000;
+    if (interval > 1) return Math.floor(interval) + ' years ago';
+    
+    interval = seconds / 2592000;
+    if (interval > 1) return Math.floor(interval) + ' months ago';
+    
+    interval = seconds / 86400;
+    if (interval > 1) return Math.floor(interval) + ' days ago';
+    
+    interval = seconds / 3600;
+    if (interval > 1) return Math.floor(interval) + ' hours ago';
+    
+    interval = seconds / 60;
+    if (interval > 1) return Math.floor(interval) + ' minutes ago';
+    
+    return 'Just now';
 }
 
-// Initialize when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initNotificationOverlay);
-} else {
-  initNotificationOverlay();
+async function markAsRead(notificationId) {
+    try {
+        await fetch('api/api-mark-notification-read.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ notification_id: notificationId })
+        });
+        
+        // Reload notifications to update UI
+        loadNotifications();
+    } catch (error) {
+        console.error('Error marking notification as read:', error);
+    }
 }

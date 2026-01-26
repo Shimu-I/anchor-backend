@@ -2,7 +2,7 @@
 <header>
   <div class="nav-container">
     <div class="logo">
-      <img src="/images/icons/favicon.png" alt="Anchor Logo" class="logo-icon">
+      <img src="images/icons/favicon.png" alt="Anchor Logo" class="logo-icon">
       <span>Lendora</span>
     </div>
     <nav>
@@ -17,12 +17,30 @@
 
     <!-- LOGGED-IN USER SECTION -->
     <div class="user-section logged-in">
+      <div class="notification-bell-wrapper" style="position:relative;display:inline-block;">
+        <div class="notification-bell" onclick="toggleNotifications(event)">
+          <i class="fas fa-bell"></i>
+          <span class="notification-badge" id="notificationCount" style="display: none;">0</span>
+        </div>
+        <div id="notificationDropdown" class="notification-dropdown">
+          <div class="notification-dropdown-header">
+            <h3>Notifications</h3>
+            <a href="notifications.html" class="view-all-link">View All</a>
+          </div>
+          <div id="notificationDropdownContent" class="notification-dropdown-content">
+            <div style="text-align: center; padding: 40px;">
+              <i class="fas fa-spinner fa-spin" style="color: #70C1BF;"></i>
+              <p style="color: #6c757d; margin-top: 10px;">Loading...</p>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="user-profile">
-        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="User Avatar" id="userAvatar"
-          class="user-avatar-img">
+        <i class="fas fa-user-circle" style="font-size: 28px; color: #7dd3c0; margin-right: 8px;"></i>
         <span id="userName">User</span>
       </div>
       <button class="logout-btn" onclick="logout()">Log Out</button>
     </div>
   </div>
 </header>
+
