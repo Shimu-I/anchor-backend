@@ -3,7 +3,7 @@ session_start();
 include 'db_conn.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.html");
+    header("Location: ../login.html");
     exit();
 }
 
@@ -28,7 +28,7 @@ if (isset($_POST['submit_rating'])) {
         $borrower_id = $stmt->fetchColumn();
 
         if (!$borrower_id) {
-            echo "<script>alert('Loan not found.'); window.location='loan.html';</script>";
+            echo "<script>alert('Loan not found.'); window.location='../loan.html';</script>";
             exit();
         }
 
@@ -36,7 +36,7 @@ if (isset($_POST['submit_rating'])) {
         $offer_check = $conn->prepare("SELECT offer_id FROM loan_offers WHERE loan_id = ? AND lender_id = ?");
         $offer_check->execute([$loan_id, $user_id]);
         if ($offer_check->rowCount() == 0) {
-            echo "<script>alert('You must be a lender on this loan to rate the borrower.'); window.location='loan.html';</script>";
+            echo "<script>alert('You must be a lender on this loan to rate the borrower.'); window.location='../loan.html';</script>";
             exit();
         }
 
@@ -44,7 +44,7 @@ if (isset($_POST['submit_rating'])) {
         $check = $conn->prepare("SELECT rating_id FROM loan_ratings WHERE loan_id = ? AND rater_id = ?");
         $check->execute([$loan_id, $user_id]);
         if ($check->rowCount() > 0) {
-            echo "<script>alert('You have already rated this loan.'); window.location='index.html';</script>";
+            echo "<script>alert('You have already rated this loan.'); window.location='../index.html';</script>";
             exit();
         }
 
@@ -75,11 +75,11 @@ if (isset($_POST['submit_rating'])) {
 
         echo "<script>
             localStorage.setItem('ratingSuccess', 'true');
-            window.location='loan.html';
+            window.location='../loan.html';
         </script>";
     } catch (PDOException $e) {
         echo "Database Error: " . $e->getMessage();
     }
 } else {
-    header("Location: rate-borrower.html");
+    header("Location: ../rate-borrower.html");
 }

@@ -4,7 +4,7 @@ include 'db_conn.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.html");
+    header("Location: ../login.html");
     exit();
 }
 
@@ -24,17 +24,17 @@ if (isset($_POST['submit_loan_request'])) {
 
     // 2. Validate Data
     if (empty($category) || empty($amount) || empty($duration) || empty($repayment_option) || empty($reason)) {
-        echo "<script>alert('All fields are required.'); window.location='loan-request-form.html';</script>";
+        echo "<script>alert('All fields are required.'); window.location='../loan-request-form.html';</script>";
         exit();
     }
 
     if ($category === 'custom' && empty($custom_category)) {
-        echo "<script>alert('Please specify custom category.'); window.location='loan-request-form.html';</script>";
+        echo "<script>alert('Please specify custom category.'); window.location='../loan-request-form.html';</script>";
         exit();
     }
 
     if ($duration === 'custom' && empty($custom_duration)) {
-        echo "<script>alert('Please specify custom duration.'); window.location='loan-request-form.html';</script>";
+        echo "<script>alert('Please specify custom duration.'); window.location='../loan-request-form.html';</script>";
         exit();
     }
 
@@ -106,12 +106,12 @@ if (isset($_POST['submit_loan_request'])) {
         $conn->commit();
         echo "<script>
             localStorage.setItem('loanRequestSuccess', 'true');
-            window.location='loan.html';
+            window.location='../loan.html';
         </script>";
     } catch (PDOException $e) {
         $conn->rollBack();
         echo "Database Error: " . $e->getMessage();
     }
 } else {
-    header("Location: loan-request-form.html");
+    header("Location: ../loan-request-form.html");
 }

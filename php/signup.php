@@ -65,7 +65,7 @@ if (isset($_POST['signup_btn'])) {
         ]);
 
         $_SESSION['message'] = "Account created successfully! Please login.";
-        header("Location: login.html");
+        header("Location: ../login.html");
         exit();
 
     } catch (PDOException $e) {

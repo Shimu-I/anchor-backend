@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to load fundraiser details
     async function loadFundraiserDetails(postId, suggestedAmount) {
         try {
-            const response = await fetch(`api-get-funding-details.php?id=${postId}`);
+            const response = await fetch(`api/api-get-funding-details.php?id=${postId}`);
             const data = await response.json();
 
             if (data.success && data.post) {

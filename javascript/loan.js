@@ -62,7 +62,7 @@ async function loadLoans(category = 'all', search = '') {
     `;
 
     try {
-        let url = 'api-get-approved-loans.php?';
+        let url = 'api/api-get-approved-loans.php?';
         if (category !== 'all') url += `category=${encodeURIComponent(category)}&`;
         if (search) url += `search=${encodeURIComponent(search)}&`;
 
@@ -289,7 +289,7 @@ function setupUserNameClick() {
 
 async function openUserProfileOverlay(userId) {
     try {
-        const response = await fetch(`api-get-public-profile.php?userId=${userId}`);
+        const response = await fetch(`api/api-get-public-profile.php?userId=${userId}`);
         const data = await response.json();
 
         if (!data.success) {

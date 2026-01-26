@@ -34,7 +34,7 @@ async function loadFundingDocuments() {
     `;
 
     try {
-        const response = await fetch(`api-get-funding-documents.php?post_id=${postId}`);
+        const response = await fetch(`api/api-get-funding-documents.php?post_id=${postId}`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

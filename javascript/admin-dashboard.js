@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 async function loadDashboardStats() {
     try {
-        const response = await fetch('api-admin-stats.php');
+        const response = await fetch('api/api-admin-stats.php');
         const data = await response.json();
 
         console.log('Dashboard stats:', data);

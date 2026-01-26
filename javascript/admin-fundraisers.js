@@ -51,7 +51,7 @@ async function loadFundraisers() {
     `;
 
     try {
-        const response = await fetch('api-admin-funding.php');
+        const response = await fetch('api/api-admin-funding.php');
         const data = await response.json();
 
         if (data.success && data.posts.length > 0) {
@@ -159,7 +159,7 @@ async function handleApproval(postId, action) {
 
         console.log('Sending approval request:', { type: 'funding', id: postId, action: action });
 
-        const response = await fetch('api-admin-approve.php', {
+        const response = await fetch('api/api-admin-approve.php', {
             method: 'POST',
             body: formData
         });

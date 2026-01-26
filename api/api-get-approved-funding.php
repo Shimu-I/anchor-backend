@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db_conn.php';
+include '../php/db_conn.php';
 
 try {
     // Fetch approved and open crowdfunding posts with creator information and contribution totals

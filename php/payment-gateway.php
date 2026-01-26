@@ -7,7 +7,7 @@ include 'db_conn.php';
 if (!isset($_SESSION['user_id'])) {
     // If not logged in, redirect to login with return URL?
     // For simplicity, just redirect to login
-    header("Location: login.html");
+    header("Location: ../login.html");
     exit();
 }
 
@@ -36,7 +36,7 @@ if (isset($_POST['submit_payment'])) {
 
     // 2. Validate
     if (empty($amount) || empty($type) || empty($ref_id)) {
-        echo "<script>alert('Invalid Payment Request. Missing details.'); window.location='index.html';</script>";
+        echo "<script>alert('Invalid Payment Request. Missing details.'); window.location='../index.html';</script>";
         exit();
     }
 
@@ -117,13 +117,13 @@ if (isset($_POST['submit_payment'])) {
 
             // Redirect with success parameter
             if ($type === 'funding') {
-                header("Location: funding.html?success=1&amount=" . urlencode($amount) . "&txn=" . urlencode($transaction_id));
+                header("Location: ../funding.html?success=1&amount=" . urlencode($amount) . "&txn=" . urlencode($transaction_id));
                 exit;
             } elseif ($type === 'loan') {
-                header("Location: loan.html?success=1&amount=" . urlencode($amount) . "&txn=" . urlencode($transaction_id));
+                header("Location: ../loan.html?success=1&amount=" . urlencode($amount) . "&txn=" . urlencode($transaction_id));
                 exit;
             } else {
-                header("Location: index.html?success=1");
+                header("Location: ../index.html?success=1");
                 exit;
             }
         } catch (Exception $e) {
@@ -134,5 +134,5 @@ if (isset($_POST['submit_payment'])) {
         echo "<script>alert('Payment Failed. Please try again.'); window.history.back();</script>";
     }
 } else {
-    header("Location: index.html");
+    header("Location: ../index.html");
 }

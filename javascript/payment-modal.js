@@ -204,7 +204,7 @@ function openPaymentModal(fundraiserId, fundraiserTitle, category, amount, progr
                 
                 <!-- Right Side: Payment Form -->
                 <div class="payment-right-panel">
-                    <form id="inlinePaymentForm" action="payment-gateway.php" method="POST" autocomplete="off">
+                    <form id="inlinePaymentForm" action="php/payment-gateway.php" method="POST" autocomplete="off">
                         <input type="hidden" name="submit_payment" value="1">
                         <input type="hidden" name="ref_amount" id="modalHiddenAmount" value="${amount}">
                         <input type="hidden" name="ref_type" value="funding">

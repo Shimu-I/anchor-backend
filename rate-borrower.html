@@ -39,7 +39,7 @@
         <p style="color: #d0ece7; margin: 5px 0;">Category: <span id="loanCategory">-</span></p>
       </div>
 
-      <form id="ratingForm" action="rate-borrower.php" method="POST">
+      <form id="ratingForm" action="php/rate-borrower.php" method="POST">
 
         <input type="hidden" name="loan_id" id="hiddenLoanId">
         <input type="hidden" name="score" id="hiddenScore" value="0">
@@ -179,7 +179,7 @@
     // Fetch loan and borrower info
     async function loadLoanInfo(loanId) {
       try {
-        const response = await fetch(`api-get-loan-info.php?loan_id=${loanId}`);
+        const response = await fetch(`api/api-get-loan-info.php?loan_id=${loanId}`);
         const data = await response.json();
 
         if (data.success) {

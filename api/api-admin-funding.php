@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db_conn.php';
+include '../php/db_conn.php';
 
 // Check if admin is logged in
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {

@@ -4,7 +4,7 @@ include 'db_conn.php';
 
 // Check login
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.html");
+    header("Location: ../login.html");
     exit();
 }
 
@@ -34,7 +34,7 @@ if (isset($_POST['submit_offer'])) {
 
     // 2. Validate
     if (empty($loan_id) || empty($amount)) {
-        echo "<script>alert('Invalid Request. Missing Loan ID or Amount.'); window.location='loan.html';</script>";
+        echo "<script>alert('Invalid Request. Missing Loan ID or Amount.'); window.location='../loan.html';</script>";
         exit();
     }
 
@@ -51,18 +51,18 @@ if (isset($_POST['submit_offer'])) {
         $loan_data = $check_stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$loan_data) {
-            echo "<script>alert('Loan request not found.'); window.location='loan.html';</script>";
+            echo "<script>alert('Loan request not found.'); window.location='../loan.html';</script>";
             exit();
         }
 
         // Prevent users from making offers on their own loans
         if ($loan_data['borrower_id'] == $user_id) {
-            echo "<script>alert('You cannot make an offer on your own loan request.'); window.location='loan.html';</script>";
+            echo "<script>alert('You cannot make an offer on your own loan request.'); window.location='../loan.html';</script>";
             exit();
         }
 
         if ($loan_data['status'] !== 'approved') {
-            echo "<script>alert('This loan is not available for offers.'); window.location='loan.html';</script>";
+            echo "<script>alert('This loan is not available for offers.'); window.location='../loan.html';</script>";
             exit();
         }
 
@@ -93,16 +93,16 @@ if (isset($_POST['submit_offer'])) {
 
         echo "<script>
             localStorage.setItem('offerSuccess', 'true');
-            window.location='loan.html';
+            window.location='../loan.html';
         </script>";
     } catch (PDOException $e) {
         // Check for duplicate offer constraint
         if ($e->getCode() == 23000) {
-            echo "<script>alert('You have already made an offer on this loan.'); window.location='loan.html';</script>";
+            echo "<script>alert('You have already made an offer on this loan.'); window.location='../loan.html';</script>";
         } else {
             echo "<script>alert('Database Error: " . addslashes($e->getMessage()) . "'); history.back();</script>";
         }
     }
 } else {
-    header("Location: index.html");
+    header("Location: ../index.html");
 }

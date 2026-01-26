@@ -7,7 +7,7 @@ let userData = null;
 
 async function loadUserProfile() {
     try {
-        const response = await fetch('api-get-user-profile.php');
+        const response = await fetch('api/api-get-user-profile.php');
         const data = await response.json();
 
         if (data.success) {
@@ -263,7 +263,7 @@ function setupEventListeners() {
             verifyBtn.disabled = true;
             verifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
 
-            const response = await fetch('api-upload-verification.php', {
+            const response = await fetch('api/api-upload-verification.php', {
                 method: 'POST',
                 body: formData
             });
@@ -294,7 +294,7 @@ function setupEventListeners() {
         const formData = new FormData(editForm);
 
         try {
-            const response = await fetch('api-update-user-profile.php', {
+            const response = await fetch('api/api-update-user-profile.php', {
                 method: 'POST',
                 body: formData
             });

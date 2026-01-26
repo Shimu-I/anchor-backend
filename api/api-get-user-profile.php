@@ -1,25 +1,26 @@
 <?php
 session_start();
-require_once 'db_conn.php';
+require_once '../php/db_conn.php';
 
 header('Content-Type: application/json');
 
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode([
+        'success' => false,
+        'error' => 'Not logged in'
+    ]);
+    exit;
+}
+
 try {
-    // Get user ID from URL parameter
-    if (!isset($_GET['userId'])) {
-        echo json_encode([
-            'success' => false,
-            'error' => 'User ID is required'
-        ]);
-        exit;
-    }
+    $user_id = $_SESSION['user_id'];
 
-    $user_id = intval($_GET['userId']);
-
-    // Get user information (public data only)
+    // Get user information
     $userQuery = "SELECT 
                     user_id,
                     username,
+                    email,
                     full_name,
                     student_id,
                     university,
@@ -101,11 +102,7 @@ try {
     $loansReceived = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Get loan offers made (as a lender)
-    $offersQuery = "SELECT 
-                        COUNT(*) as total_offers,
-                        COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending_offers,
-                        COUNT(CASE WHEN status = 'accepted' THEN 1 END) as accepted_offers,
-                        COUNT(CASE WHEN status = 'rejected' THEN 1 END) as rejected_offers
+    $offersQuery = "SELECT COUNT(*) as total_offers
                     FROM loan_offers 
                     WHERE lender_id = :user_id";
 
@@ -113,7 +110,7 @@ try {
     $stmt->execute([':user_id' => $user_id]);
     $offersData = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Get all approved loan requests with details
+    // Get all loan requests with details
     $loansQuery = "SELECT 
                      lr.loan_id,
                      lr.amount,
@@ -121,54 +118,53 @@ try {
                      lr.custom_category,
                      lr.reason,
                      lr.status,
-                     lr.interest_rate,
+                     lr.created_at,
                      lr.duration_months,
-                     lr.created_at
+                     lr.custom_duration,
+                     COUNT(DISTINCT lo.offer_id) as offer_count
                    FROM loan_requests lr
-                   WHERE lr.borrower_id = :user_id AND lr.status = 'approved'
+                   LEFT JOIN loan_offers lo ON lr.loan_id = lo.loan_id
+                   WHERE lr.borrower_id = :user_id
+                   GROUP BY lr.loan_id
                    ORDER BY lr.created_at DESC";
 
     $stmt = $conn->prepare($loansQuery);
     $stmt->execute([':user_id' => $user_id]);
     $loans = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Get all approved funding posts with details
+    // Get all funding posts with details
     $fundingQuery = "SELECT 
                        cp.post_id,
                        cp.title,
-                       cp.summary,
                        cp.amount_needed,
+                       COALESCE(SUM(CASE WHEN cc.payment_status = 'completed' THEN cc.amount ELSE 0 END), 0) as current_amount,
                        cp.category,
                        cp.custom_category,
                        cp.status,
                        cp.created_at,
-                       COALESCE(SUM(cc.amount), 0) as amount_raised,
-                       COUNT(cc.contrib_id) as contributor_count
+                       COUNT(DISTINCT cc.contrib_id) as contribution_count
                      FROM crowdfunding_posts cp
-                     LEFT JOIN crowdfunding_contributions cc ON cp.post_id = cc.post_id AND cc.payment_status = 'completed'
-                     WHERE cp.creator_id = :user_id AND cp.status = 'approved'
+                     LEFT JOIN crowdfunding_contributions cc ON cp.post_id = cc.post_id
+                     WHERE cp.creator_id = :user_id
                      GROUP BY cp.post_id
                      ORDER BY cp.created_at DESC";
 
     $stmt = $conn->prepare($fundingQuery);
     $stmt->execute([':user_id' => $user_id]);
-    $funding = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $fundingPosts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Get all loan offers made by this user
+    // Get loan offers made (as a lender)
     $myOffersQuery = "SELECT 
                         lo.offer_id,
-                        lo.loan_id,
-                        lo.amount,
+                        lo.amount as offer_amount,
                         lo.interest_rate,
-                        lo.status,
-                        lo.terms,
+                        lo.status as offer_status,
                         lo.created_at,
+                        lr.loan_id,
                         lr.amount as loan_amount,
                         lr.category,
                         lr.custom_category,
-                        lr.reason,
-                        u.full_name as borrower_name,
-                        u.user_id as borrower_id
+                        u.full_name as borrower_name
                       FROM loan_offers lo
                       INNER JOIN loan_requests lr ON lo.loan_id = lr.loan_id
                       INNER JOIN users u ON lr.borrower_id = u.user_id
@@ -177,53 +173,29 @@ try {
 
     $stmt = $conn->prepare($myOffersQuery);
     $stmt->execute([':user_id' => $user_id]);
-    $offers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $myOffers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Prepare response
-    $response = [
+    echo json_encode([
         'success' => true,
-        'user' => [
-            'user_id' => $user['user_id'],
-            'username' => $user['username'],
-            'full_name' => $user['full_name'],
-            'student_id' => $user['student_id'],
-            'university' => $user['university'],
-            'verification_status' => $user['verification_status'],
-            'role' => $user['role'],
-            'created_at' => $user['created_at'],
-            'avg_rating' => $ratingData['avg_rating'] ? round($ratingData['avg_rating'], 1) : null,
+        'user' => $user,
+        'rating' => [
+            'avg_rating' => $ratingData['avg_rating'] ? round($ratingData['avg_rating'], 1) : 0,
             'rating_count' => $ratingData['rating_count']
         ],
-        'statistics' => [
-            'total_loans' => intval($loanStats['total_loans']),
-            'pending_loans' => intval($loanStats['pending_loans']),
-            'approved_loans' => intval($loanStats['approved_loans']),
-            'rejected_loans' => intval($loanStats['rejected_loans']),
-            'total_funding' => intval($fundingStats['total_funding']),
-            'pending_funding' => intval($fundingStats['pending_funding']),
-            'approved_funding' => intval($fundingStats['approved_funding']),
-            'rejected_funding' => intval($fundingStats['rejected_funding']),
-            'total_offers' => intval($offersData['total_offers']),
-            'pending_offers' => intval($offersData['pending_offers']),
-            'accepted_offers' => intval($offersData['accepted_offers']),
-            'rejected_offers' => intval($offersData['rejected_offers']),
-            'total_funding_received' => floatval($fundingReceived['total_funding_received']),
-            'total_loans_received' => floatval($loansReceived['total_loans_received'])
+        'stats' => [
+            'loans' => $loanStats,
+            'funding' => $fundingStats,
+            'offers_made' => $offersData['total_offers'],
+            'total_funding_received' => $fundingReceived['total_funding_received'],
+            'total_loans_received' => $loansReceived['total_loans_received']
         ],
         'loans' => $loans,
-        'funding' => $funding,
-        'offers' => $offers
-    ];
-
-    echo json_encode($response);
+        'funding_posts' => $fundingPosts,
+        'my_offers' => $myOffers
+    ]);
 } catch (PDOException $e) {
     echo json_encode([
         'success' => false,
         'error' => 'Database error: ' . $e->getMessage()
-    ]);
-} catch (Exception $e) {
-    echo json_encode([
-        'success' => false,
-        'error' => 'Error: ' . $e->getMessage()
     ]);
 }

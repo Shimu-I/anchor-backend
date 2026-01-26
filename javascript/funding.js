@@ -19,7 +19,7 @@ const categoryFilterMap = {
 // Load posts from database
 async function loadPosts() {
   try {
-    const response = await fetch('api-get-approved-funding.php');
+    const response = await fetch('api/api-get-approved-funding.php');
     const data = await response.json();
 
     if (data.success && data.posts) {

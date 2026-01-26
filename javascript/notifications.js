@@ -3,7 +3,7 @@ let notificationsData = [];
 
 async function loadNotifications() {
   try {
-    const response = await fetch('api-get-notifications.php');
+    const response = await fetch('api/api-get-notifications.php');
     const data = await response.json();
 
     if (data.success) {

@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Logout function
 function logout() {
-  window.location.href = 'logout.php';
+  window.location.href = 'php/logout.php';
 }
 
 

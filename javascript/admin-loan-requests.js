@@ -52,7 +52,7 @@ async function loadLoanRequests() {
     `;
 
     try {
-        const response = await fetch('api-admin-loans.php');
+        const response = await fetch('api/api-admin-loans.php');
         const data = await response.json();
 
         if (data.success && data.loans.length > 0) {
@@ -158,7 +158,7 @@ async function handleApproval(loanId, action) {
 
         console.log('Sending approval request:', { type: 'loan', id: loanId, action: action });
 
-        const response = await fetch('api-admin-approve.php', {
+        const response = await fetch('api/api-admin-approve.php', {
             method: 'POST',
             body: formData
         });

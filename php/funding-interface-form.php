@@ -4,7 +4,7 @@ include 'db_conn.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.html");
+    header("Location: ../login.html");
     exit();
 }
 
@@ -36,13 +36,13 @@ if (isset($_POST['submit_fundraiser'])) {
 
     // 2. Validate Key Data
     if (empty($category) || empty($title) || empty($summary)) {
-        echo "<script>alert('Please fill in required fields.'); window.location='funding-interface-form.html';</script>";
+        echo "<script>alert('Please fill in required fields.'); window.location='../funding-interface-form.html';</script>";
         exit();
     }
 
     // If customized category
     if ($category === 'custom' && empty($custom_category)) {
-        echo "<script>alert('Please specify custom category.'); window.location='funding-interface-form.html';</script>";
+        echo "<script>alert('Please specify custom category.'); window.location='../funding-interface-form.html';</script>";
         exit();
     }
 
@@ -179,11 +179,11 @@ if (isset($_POST['submit_fundraiser'])) {
         }
 
         $conn->commit();
-        echo "<script>alert('Fundraiser Created Successfully!'); window.location='index.html';</script>";
+        echo "<script>alert('Fundraiser Created Successfully!'); window.location='../index.html';</script>";
     } catch (PDOException $e) {
         $conn->rollBack();
         echo "Database Error: " . $e->getMessage();
     }
 } else {
-    header("Location: funding-interface-form.html");
+    header("Location: ../funding-interface-form.html");
 }

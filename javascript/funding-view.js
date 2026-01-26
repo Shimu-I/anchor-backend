@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // Fetch and display funding details
 async function loadFundingDetails(id) {
   try {
-    const response = await fetch(`api-get-funding-details.php?id=${id}`);
+    const response = await fetch(`api/api-get-funding-details.php?id=${id}`);
     const data = await response.json();
 
     if (data.success && data.post) {
@@ -204,9 +204,4 @@ function showSuccessNotification(amount, txnId) {
       setTimeout(() => notification.remove(), 300);
     }
   }, 3000);
-}
-
-      </a >
-    </div >
-  `;
 }

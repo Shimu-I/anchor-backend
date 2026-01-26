@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 async function loadPublicProfile() {
     try {
-        const response = await fetch(`api-get-public-profile.php?userId=${viewUserId}`);
+        const response = await fetch(`api/api-get-public-profile.php?userId=${viewUserId}`);
         const data = await response.json();
 
         if (!data.success) {
